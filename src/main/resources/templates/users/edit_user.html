@@ -9,7 +9,7 @@
 <body>
 <div align="center">
     <h3>Изменить пользователя</h3>
-    <form th:action="@{/users/edit_user{id} (id=${edituser.getId()})}" th:object="${edituser}"
+    <form action="#" th:action="@{/users/edit_user{id} (id=${user.getId()})}" th:object="${user}"
           method="post">
         <table border="0" cellpadding="5">
             <tr>
@@ -18,16 +18,19 @@
             </tr>
             <tr>
                 <td>Имя:</td>
-                <td><input type="text" th:field="*{name}" th:value="*{name}"/></td>
+                <td><input maxlength="30" type="text" th:field="*{name}" th:value="*{name}"/></td>
             </tr>
             <tr>
                 <td>Возраст:</td>
-                <td><input type="text" th:field="*{age}" th:value="*{age}"/></td>
+                <td><input required pattern="^[0-9]+$" maxlength="3" type="text" th:field="*{age}" th:value="*{age}"/></td>
             </tr>
             <tr>
                 <td>E-mail:</td>
-                <td><input type="text" th:field="*{email}" th:value="*{email}"/></td>
+                <td><input maxlength="255" type="text" th:field="*{email}" th:value="*{email}"/></td>
             </tr>
+            <th:block th:if="${#fields.hasErrors()}">
+                <h6 th:each="err : ${#fields.allErrors()}" th:text="${err}"></h6>
+            </th:block>
             <tr>
                 <td colspan="2"><input type="submit" value="Изменить"></td>
             </tr>
