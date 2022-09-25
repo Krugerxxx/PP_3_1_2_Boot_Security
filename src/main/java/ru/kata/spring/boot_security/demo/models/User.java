@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -25,6 +26,13 @@ public class User {
     @Email(message = "Неверный e-mail")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    private String password;
+
+    @NotEmpty
+    @ManyToMany(fetch = FetchType.EAGER)
+
+    private List<Role> roles;
 
     public User() {
     }
