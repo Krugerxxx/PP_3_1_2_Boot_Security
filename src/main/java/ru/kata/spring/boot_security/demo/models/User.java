@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,8 +32,10 @@ public class User {
 
     @NotEmpty
     @ManyToMany(fetch = FetchType.EAGER)
-
-    private List<Role> roles;
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
 
     public User() {
     }
