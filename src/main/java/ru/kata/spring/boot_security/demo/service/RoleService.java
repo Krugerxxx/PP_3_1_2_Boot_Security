@@ -12,6 +12,8 @@ import java.util.Set;
 public interface RoleService {
     public List<Role> listAll();
 
+    Role save(Role role);
+
     public List<Role> getByName(String name);
 
 

@@ -13,13 +13,22 @@ import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService {
+    private RoleDao roleDao;
+
     @Autowired
-    @Qualifier(value = "roleDaoImpl")
-    RoleDao roleDao;
+    public RoleServiceImpl(@Qualifier(value = "roleDaoImpl") RoleDao roleDao) {
+        this.roleDao = roleDao;
+    }
 
     @Override
     public List<Role> listAll() {
         return roleDao.findAll();
+    }
+
+    @Override
+    public Role save(Role role) {
+        roleDao.save(role);
+        return role;
     }
 
     @Override

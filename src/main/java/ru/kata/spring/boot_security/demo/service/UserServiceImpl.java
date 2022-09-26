@@ -11,9 +11,12 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    @Qualifier(value = "userDaoSpringDataImpl")
     private UserDao userDao;
+
+    @Autowired
+    public UserServiceImpl(@Qualifier(value = "userDaoSpringDataImpl") UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public void save(User user) {

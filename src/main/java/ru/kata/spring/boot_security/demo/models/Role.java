@@ -12,9 +12,13 @@ public class Role {
 
     @NotEmpty (message = "Роль не может быть пустой")
     @Column(name = "name")
-    String name;
+    private String name;
 
     public Role() {
+    }
+
+    public Role(String name){
+        this.name = name;
     }
 
     public Long getId() {
