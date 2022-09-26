@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/users")
@@ -63,18 +65,32 @@ public class UserController {
     }
 
     @RequestMapping(value = "/edit_user{id}", method = RequestMethod.GET)
-    public String editUserForm(@PathVariable(value = "id") Long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "users/edit_user";
+    public ModelAndView editUserForm(@PathVariable(value = "id") Long id, ModelAndView model) {
+        model.addObject("user", userService.getUser(id));
+        model.addObject("roleName", roleService.listAll());
+        model.setViewName("users/edit_user");
+        return model;
     }
 
     @RequestMapping(value = "/edit_user{id}", method = RequestMethod.POST)
-    public String editUser(@ModelAttribute(value = "user") @Valid User user, BindingResult result) {
+    public ModelAndView editUser(@ModelAttribute(value = "user") @Valid User user,
+                                 BindingResult result,
+                                 ModelAndView model) {
+        model.addObject("roleName", roleService.listAll());
         if (result.hasErrors()) {
-            return "users/edit_user";
+            model.setViewName("users/edit_user");
+            return model;
         }
-        userService.update(user);
-        return "redirect:/users";
+        try {
+            userService.update(user);
+        } catch (Exception e) {
+            model.addObject("emailExists", "Такой email существует");
+            model.addObject("user", user);
+            model.setViewName("/users/new_user");
+            return model;
+        }
+        model.setViewName("redirect:/users");
+        return model;
     }
 
     @RequestMapping(value = "/delete_user{id}")
