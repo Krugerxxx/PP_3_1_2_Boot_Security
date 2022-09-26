@@ -34,7 +34,7 @@ public class DefaultUser {
             user.setName("user");
             user.setAge(18);
             user.setEmail("sss@mail.ru");
-            user.setPassword("$2a$12$98Z6F2u2Ui.8k2ENMLiq9OTXpwQ.i22SnLht1a6qdciTn2oOjRtr2");
+            user.setPassword("user");
             user.setRoles(roleService.getByName("ADMIN"));
             user.setRoles(roleService.getByName("USER"));
             userService.save(user);
