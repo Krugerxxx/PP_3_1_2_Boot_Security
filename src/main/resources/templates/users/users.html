@@ -16,6 +16,8 @@
                 <td>Имя</td>
                 <td>Возраст</td>
                 <td>e-mail</td>
+                <td>Пароль</td>
+                <td>Роль</td>
                 <td></td>
             </tr>
             <th:block th:each="user : ${userslist}">
@@ -24,8 +26,8 @@
                     <td th:text="${user.getName()}"></td>
                     <td th:text="${user.getAge()}"></td>
                     <td th:text="${user.getEmail()}"></td>
-                    <td th:text="${user}"></td>
-                    <td th:text="${user}"></td>
+                    <td th:text="${user.getPassword()}"></td>
+                    <td> <p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"> /> </td>
                     <td>
                         <a th:href="@{users/edit_user{id}(id=${user.getId()})}">Изменить</a>
                         <a th:href="@{users/delete_user{id}(id=${user.getId()})}">Удалить</a>

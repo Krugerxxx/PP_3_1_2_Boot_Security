@@ -28,9 +28,12 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @NotEmpty(message = "Пароль не может быть пустым")
+    @Size(min = 3, message = "Пароль не может быть меньше 3х символов")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @NotEmpty
+    @NotEmpty(message = "Выберете роль")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -71,5 +74,22 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
 
 }
