@@ -10,12 +10,12 @@
 <div align="center">
     <h3>Изменить пользователя</h3>
     <div th:text="${emailExists}"></div>
-    <form action="#" th:action="@{/users/edit_user{id} (id=${user.getId()})}" th:object="${user}"
+    <form action="#" th:action="@{/admin/edit_user{id} (id=${user.getId()})}" th:object="${user}"
           method="post">
         <table border="0" cellpadding="5">
             <tr>
                 <td>ID</td>
-                <td><input type="text" th:value="*{id}" readonly /></td>
+                <td><input type="text" th:value="*{id}" readonly/></td>
             </tr>
             <tr>
                 <td>Имя:</td>
@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <td>Password:</td>
-                <td><input maxlength="30" type="password" th:field="*{password}" /></td>
+                <td><input maxlength="30" type="password" th:field="*{password}"/></td>
             </tr>
             <tr>
                 <td>Role:</td>
@@ -51,12 +51,17 @@
             </tr>
         </table>
     </form>
-    <h4>
-        <a href="../users">Назад</a>
-    </h4>
-    <h4>
-        <a href="../users/..">На главную</a>
-    </h4>
+
+    <br>
+    <form action="#" th:action="@{/admin}" th:method="Get">
+        <input type="submit" value="Назад"/>
+    </form>
+
+    <br>
+    <form action="#" th:action="@{/logout}" th:method="Get">
+        <input type="submit" value="Выход"/>
+    </form>
+
 </div>
 </body>
 </html>

@@ -10,7 +10,7 @@
 <div align="center">
     <h3>Новый пользователь</h3>
     <div th:text="${emailExists}"></div>
-    <form action="#" th:action="@{/users/new_user}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/admin/new_user}" th:object="${user}" method="post">
         <table border="0" cellpadding="5">
             <tr>
                 <td>Имя:</td>
@@ -46,12 +46,17 @@
         </table>
     </form>
 
-    <h4>
-        <a href="../users">Назад</a>
-    </h4>
-    <h4>
-        <a href="../users/..">На главную</a>
-    </h4>
+    <br>
+    <form action="#" th:action="@{/admin}" th:method="Get">
+        <input type="submit" value="Назад"/>
+    </form>
+
+    <br>
+    <form action="#" th:action="@{/logout}" th:method="Get">
+        <input type="submit" value="Выход"/>
+    </form>
+
+
 </div>
 </body>
 </html>

@@ -16,7 +16,6 @@
                 <td>Имя</td>
                 <td>Возраст</td>
                 <td>e-mail</td>
-                <td>Пароль</td>
                 <td>Роль</td>
                 <td></td>
             </tr>
@@ -26,18 +25,34 @@
                     <td th:text="${user.getName()}"></td>
                     <td th:text="${user.getAge()}"></td>
                     <td th:text="${user.getEmail()}"></td>
-                    <td th:text="${user.getPassword()}"></td>
-                    <td> <p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"> /> </td>
+                    <td><p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"> /></td>
                     <td>
-                        <a th:href="@{users/edit_user{id}(id=${user.getId()})}">Изменить</a>
-                        <a th:href="@{users/delete_user{id}(id=${user.getId()})}">Удалить</a>
+                        <form th:action="@{/admin/edit_user{id}(id=${user.getId()})}" th:method="GET">
+                            <input type="submit" value="Изменить"/>
+                        </form>
+                        <form th:action="@{/admin/delete_user{id}(id=${user.getId()})}" th:method="GET">
+                            <input type="submit" value="Удалить"/>
+                        </form>
                     </td>
                 </tr>
             </th:block>
         </table>
     </div>
-    <p><a href="users/new_user">Добавить пользователя</a></p>
-    <p><a href="users/..">На главную</a></p>
+
+    <br>
+    <form th:action="@{/admin/new_user}" th:method="GET">
+        <input type="submit" value="Добавить пользователя"/>
+    </form>
+
+    <br>
+    <form th:action="@{/user}" th:method="GET">
+        <input type="submit" value="На страницу пользователя"/>
+    </form>
+
+    <br>
+    <form action="#" th:action="@{/logout}" th:method="Get">
+        <input type="submit" value="Выход"/>
+    </form>
 </div>
 
 </body>
