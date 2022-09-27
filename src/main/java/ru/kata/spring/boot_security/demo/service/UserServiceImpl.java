@@ -57,18 +57,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String name) {
-        return userDao.listAll().stream().filter(n -> n.getName().equals(name)).findFirst().orElse(null);
+        return userDao.listAll().stream().filter(n -> n.getEmail().equals(name)).findFirst().orElse(null);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
-        System.out.println(username);
         if (user == null) {
-            System.out.println("Нет юзера");
             throw new UsernameNotFoundException("User not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
 

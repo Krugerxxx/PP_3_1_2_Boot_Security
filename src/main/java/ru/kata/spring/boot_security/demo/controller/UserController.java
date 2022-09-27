@@ -86,7 +86,7 @@ public class UserController {
         } catch (Exception e) {
             model.addObject("emailExists", "Такой email существует");
             model.addObject("user", user);
-            model.setViewName("/users/new_user");
+            model.setViewName("/users/edit_user");
             return model;
         }
         model.setViewName("redirect:/users");
