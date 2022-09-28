@@ -28,7 +28,7 @@ public class AdminController {
     @GetMapping()
     public String welcome(Model model) {
         model.addAttribute("userslist", userService.findAll().stream()
-                .sorted((n, m) -> (int)(n.getId() - m.getId()))
+                .sorted((n, m) -> (int) (n.getId() - m.getId()))
                 .collect(Collectors.toList()));
         return "users/users";
     }
@@ -50,12 +50,11 @@ public class AdminController {
             model.setViewName("users/new_user");
             return model;
         }
-        userService.save(user);
-        /*} catch (Exception e) {
+        if (userService.save(user).getEmail() == "") {
             model.addObject("emailExists", "Такой email существует");
             model.setViewName("/users/new_user");
             return model;
-        }*/
+        }
         model.setViewName("redirect:/admin");
         return model;
     }
@@ -77,10 +76,10 @@ public class AdminController {
             model.setViewName("users/edit_user");
             return model;
         }
-        try {
-            userService.save(user);
-        } catch (Exception e) {
+        if (userService.save(user).getEmail() == "") {
             model.addObject("emailExists", "Такой email существует");
+            user.setEmail(userService.findById(user.getId()).getEmail());
+            System.out.println(user.getEmail());
             model.addObject("user", user);
             model.setViewName("/users/edit_user");
             return model;
