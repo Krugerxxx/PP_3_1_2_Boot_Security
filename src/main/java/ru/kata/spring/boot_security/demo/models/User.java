@@ -32,13 +32,11 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    //@NotEmpty(message = "Пароль не может быть пустым")
-    //@Size(min = 3, message = "Пароль не может быть меньше 3х символов")
     @Column(name = "password", nullable = false)
     private String password;
 
     @NotEmpty(message = "Выберете роль")
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
