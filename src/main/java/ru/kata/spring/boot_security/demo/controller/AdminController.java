@@ -30,9 +30,7 @@ public class AdminController {
     @GetMapping()
     public String welcome(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         model.addAttribute("activeUser", userService.findByUsername(userDetails.getUsername()));
-        model.addAttribute("userslist", userService.findAll().stream()
-                .sorted((n, m) -> (int) (n.getId() - m.getId()))
-                .collect(Collectors.toList()));
+        model.addAttribute("userslist", userService.findAll());
         return "users/users";
     }
 

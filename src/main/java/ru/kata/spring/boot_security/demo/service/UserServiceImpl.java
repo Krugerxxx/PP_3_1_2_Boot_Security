@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         try {
             if (user.getId() != null && user.getPassword() == "") {
@@ -42,10 +43,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<User> findAll() {
+    public List<User> findAll() {
         Set<User> userSet = new HashSet<>();
         userRepo.findAll().forEach(n -> userSet.add(n));
-        return userSet;
+        return userSet.stream()
+                .sorted((n, m) -> (int) (n.getId() - m.getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         userRepo.deleteById(id);
     }

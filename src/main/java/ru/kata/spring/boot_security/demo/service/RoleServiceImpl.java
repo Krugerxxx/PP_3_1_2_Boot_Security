@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.dao.RoleRepo;
 import ru.kata.spring.boot_security.demo.models.Role;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public Set<Role> findAll() {
         Set<Role> roleSet = new HashSet<>();
         roleRepo.findAll().forEach(n -> roleSet.add(n));
