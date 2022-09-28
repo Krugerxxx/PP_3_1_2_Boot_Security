@@ -13,7 +13,7 @@ public class Role implements GrantedAuthority {
     private Long id;
 
     @NotEmpty(message = "Роль не может быть пустой")
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     public Role() {

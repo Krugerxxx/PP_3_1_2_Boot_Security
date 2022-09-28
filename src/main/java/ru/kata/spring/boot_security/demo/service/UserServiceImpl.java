@@ -1,63 +1,61 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.dao.UserDao;
+import ru.kata.spring.boot_security.demo.dao.UserRepo;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserDao userDao;
+    private UserRepo userRepo;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(@Qualifier(value = "userDaoSpringDataImpl") UserDao userDao,
-                           BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepo userRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepo = userRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDao.save(user);
+        try {
+            userRepo.save(user);
+        } catch (Exception e) {
+            user.setEmail("");
+        }
+        return user;
     }
 
     @Override
-    public void update(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDao.update(user);
+    public Set<User> findAll() {
+        Set<User> userSet = new HashSet<>();
+        userRepo.findAll().forEach(n -> userSet.add(n));
+        return userSet;
     }
 
     @Override
-    public List<User> listAll() {
-        return userDao.listAll();
-    }
-
-    @Override
-    public User getUser(long id) {
-        return userDao.getUser(id);
-    }
-
-    @Override
-    public void deleteUser(long id) {
-        userDao.deleteUser(id);
+    public User findById(Long id) {
+        return userRepo.findById(id).get();
     }
 
     @Override
     public User findByUsername(String name) {
-        return userDao.listAll().stream().filter(n -> n.getEmail().equals(name)).findFirst().orElse(null);
+        return findAll().stream().filter(n -> n.getEmail().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        userRepo.deleteById(id);
     }
 
     @Override

@@ -1,41 +1,46 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.dao.RoleDao;
+import ru.kata.spring.boot_security.demo.dao.RoleRepo;
 import ru.kata.spring.boot_security.demo.models.Role;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService {
-    private RoleDao roleDao;
+    private RoleRepo roleRepo;
 
     @Autowired
-    public RoleServiceImpl(@Qualifier(value = "roleDaoImpl") RoleDao roleDao) {
-        this.roleDao = roleDao;
-    }
-
-    @Override
-    public List<Role> listAll() {
-        return roleDao.findAll();
+    public RoleServiceImpl(RoleRepo roleRepo) {
+        this.roleRepo = roleRepo;
     }
 
     @Override
     public Role save(Role role) {
-        roleDao.save(role);
+        try {
+            roleRepo.save(role);
+        }catch (Exception e){
+            System.out.println("Произошла ошибка при сохранении роли, скорее всего такая роль существует");
+        }
         return role;
     }
 
     @Override
-    public List<Role> getByName(String name) {
-        List<Role> roles = new ArrayList<>();
-        for (Role role : listAll()) {
-            if (name.contains(role.getName()))
-                roles.add(role);
+    public Set<Role> findAll() {
+        Set<Role> roleSet = new HashSet<>();
+        roleRepo.findAll().forEach(n -> roleSet.add(n));
+        return roleSet;
+    }
+
+    @Override
+    public Role getByName(String name) {
+        for (Role role : findAll()) {
+            if (name.contains(role.getName())){
+                return role;
+            }
         }
-        return roles;
+        return null;
     }
 }

@@ -8,6 +8,8 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class DefaultUser {
@@ -22,28 +24,28 @@ public class DefaultUser {
 
     @PostConstruct
     private void initialize() {
-        if (roleService.listAll().stream().noneMatch(n -> n.getName().equals("ADMIN"))) {
+        if (roleService.findAll().stream().noneMatch(n -> n.getName().equals("ADMIN"))) {
             roleService.save(new Role("ADMIN"));
         }
-        if (roleService.listAll().stream().noneMatch(n -> n.getName().equals("USER"))) {
+        if (roleService.findAll().stream().noneMatch(n -> n.getName().equals("USER"))) {
             roleService.save(new Role("USER"));
         }
-        if (userService.listAll().stream().noneMatch(n -> n.getEmail().equals("user@mail.ru"))) {
+        if (userService.findAll().stream().noneMatch(n -> n.getEmail().equals("user@mail.ru"))) {
             User user = new User();
             user.setName("user");
             user.setAge(1);
             user.setEmail("user@mail.ru");
             user.setPassword("user");
-            user.setRoles(roleService.getByName("USER"));
+            user.setRoles(Set.of(roleService.getByName("USER")));
             userService.save(user);
         }
-        if (userService.listAll().stream().noneMatch(n -> n.getEmail().equals("admin@mail.ru"))) {
+        if (userService.findAll().stream().noneMatch(n -> n.getEmail().equals("admin@mail.ru"))) {
             User user = new User();
             user.setName("admin");
             user.setAge(1);
             user.setEmail("admin@mail.ru");
             user.setPassword("admin");
-            user.setRoles(roleService.listAll());
+            user.setRoles(roleService.findAll());
             userService.save(user);
         }
     }

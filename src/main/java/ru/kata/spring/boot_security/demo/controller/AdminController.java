@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,14 +27,16 @@ public class AdminController {
 
     @GetMapping()
     public String welcome(Model model) {
-        model.addAttribute("userslist", userService.listAll());
+        model.addAttribute("userslist", userService.findAll().stream()
+                .sorted((n, m) -> (int)(n.getId() - m.getId()))
+                .collect(Collectors.toList()));
         return "users/users";
     }
 
     @RequestMapping(value = "/new_user", method = RequestMethod.GET)
     public ModelAndView newUserForm(ModelAndView model, User user) {
         model.addObject("user", user);
-        model.addObject("roleName", roleService.listAll());
+        model.addObject("roleName", roleService.findAll());
         model.setViewName("users/new_user");
         return model;
     }
@@ -42,26 +45,25 @@ public class AdminController {
     public ModelAndView newUserSubmit(@ModelAttribute(value = "user") @Valid User user,
                                       BindingResult result,
                                       ModelAndView model) {
-        model.addObject("roleName", roleService.listAll());
+        model.addObject("roleName", roleService.findAll());
         if (result.hasErrors()) {
             model.setViewName("users/new_user");
             return model;
         }
-        try {
-            userService.save(user);
-        } catch (Exception e) {
+        userService.save(user);
+        /*} catch (Exception e) {
             model.addObject("emailExists", "Такой email существует");
             model.setViewName("/users/new_user");
             return model;
-        }
+        }*/
         model.setViewName("redirect:/admin");
         return model;
     }
 
     @RequestMapping(value = "/edit_user{id}", method = RequestMethod.GET)
     public ModelAndView editUserForm(@PathVariable(value = "id") Long id, ModelAndView model) {
-        model.addObject("user", userService.getUser(id));
-        model.addObject("roleName", roleService.listAll());
+        model.addObject("user", userService.findById(id));
+        model.addObject("roleName", roleService.findAll());
         model.setViewName("users/edit_user");
         return model;
     }
@@ -70,13 +72,13 @@ public class AdminController {
     public ModelAndView editUser(@ModelAttribute(value = "user") @Valid User user,
                                  BindingResult result,
                                  ModelAndView model) {
-        model.addObject("roleName", roleService.listAll());
+        model.addObject("roleName", roleService.findAll());
         if (result.hasErrors()) {
             model.setViewName("users/edit_user");
             return model;
         }
         try {
-            userService.update(user);
+            userService.save(user);
         } catch (Exception e) {
             model.addObject("emailExists", "Такой email существует");
             model.addObject("user", user);
@@ -89,7 +91,7 @@ public class AdminController {
 
     @RequestMapping(value = "/delete_user{id}")
     public String deleteUser(@PathVariable(value = "id") Long id) {
-        userService.deleteUser(id);
+        userService.deleteById(id);
         return "redirect:/admin";
     }
 
