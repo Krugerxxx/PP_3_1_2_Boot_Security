@@ -15,7 +15,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotEmpty(message = "Имя не может быть пустым")
     @Size(min = 2, message = "Имя не может быть меньше 2х символов")
@@ -32,8 +32,8 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @NotEmpty(message = "Пароль не может быть пустым")
-    @Size(min = 3, message = "Пароль не может быть меньше 3х символов")
+    //@NotEmpty(message = "Пароль не может быть пустым")
+    //@Size(min = 3, message = "Пароль не может быть меньше 3х символов")
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -47,11 +47,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

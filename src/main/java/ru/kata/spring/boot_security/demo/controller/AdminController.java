@@ -50,8 +50,10 @@ public class AdminController {
             model.setViewName("users/new_user");
             return model;
         }
+
+        String enterEmail = user.getEmail();
         if (userService.save(user).getEmail() == "") {
-            model.addObject("emailExists", "Такой email существует");
+            model.addObject("emailExists", "Такой email существует: " + enterEmail);
             model.setViewName("/users/new_user");
             return model;
         }
@@ -76,10 +78,11 @@ public class AdminController {
             model.setViewName("users/edit_user");
             return model;
         }
+
+        String enterEmail = user.getEmail();
         if (userService.save(user).getEmail() == "") {
-            model.addObject("emailExists", "Такой email существует");
+            model.addObject("emailExists", "Такой email существует: " + enterEmail);
             user.setEmail(userService.findById(user.getId()).getEmail());
-            System.out.println(user.getEmail());
             model.addObject("user", user);
             model.setViewName("/users/edit_user");
             return model;

@@ -27,8 +27,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         try {
+            if (user.getId() != null && user.getPassword() == "") {
+                user.setPassword(userRepo.findById(user.getId()).get().getPassword());
+            } else {
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            }
             userRepo.save(user);
         } catch (Exception e) {
             user.setEmail("");
