@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <html lang="en">
 <head>
 
@@ -29,6 +30,12 @@
         .container-fluid {
             flex: 1;
         }
+
+        #sidebar {
+            flex-direction: column;
+            padding: 0px;
+        }
+
     </style>
 </head>
 <body>
@@ -54,11 +61,26 @@
 
 <div class="container-fluid" d-flex flex-column>
     <div class="row flex-fill d-flex h-100 justify-content-start">
-        <div id="sidebar" class="col-2" style="background-color: white">
 
+        <div id="sidebar" class="col-2 bg-white">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <br>
+                <a class="nav-link active" id="home-tab" data-toggle="pill" href="#" role="tab"
+                   aria-controls="home" aria-selected="true" sec:authorize="hasAuthority('ADMIN')">
+                    Admin
+                </a>
+                <a class="nav-link" id="profile-tab" data-toggle="pill" href="#" role="tab"
+                   aria-controls="profile" aria-selected="false" sec:authorize="hasAuthority('ADMIN')">
+                    User
+                </a>
+                <a class="nav-link active" id="profile-tab-u" data-toggle="pill" href="#" role="tab"
+                   aria-controls="profile" aria-selected="true" sec:authorize="!hasAuthority('ADMIN')">
+                    User
+                </a>
+            </div>
         </div>
 
-        <div class="col-10">
+        <div class="col-10" sec:authorize="hasAuthority('ADMIN')">
             <div class="container-fluid">
                 <h1 style="padding-top: 5px">Admin panel</h1>
                 <div>
@@ -108,6 +130,7 @@
                 </form>
             </div>
         </div>
+
     </div>
 </div>
 
