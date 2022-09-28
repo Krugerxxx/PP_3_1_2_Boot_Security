@@ -3,60 +3,125 @@
       xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
+
+    <!-- Required meta tags -->
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+
     <title>Users</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #F8F9FA;
+        }
 
-    <!-- Bootstrap -->
-
+        .container-fluid {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
-<div align="center">
-    <div>
-        <h2>Пользователи:</h2>
-        <table border="1" cellpadding="5">
-            <tr>
-                <td>Id</td>
-                <td>Имя</td>
-                <td>Возраст</td>
-                <td>e-mail</td>
-                <td>Роль</td>
-                <td></td>
-            </tr>
-            <th:block th:each="user : ${userslist}">
-                <tr>
-                    <td th:text="${user.getId()}"></td>
-                    <td th:text="${user.getName()}"></td>
-                    <td th:text="${user.getAge()}"></td>
-                    <td th:text="${user.getEmail()}"></td>
-                    <td><p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"> /></td>
-                    <td>
-                        <form th:action="@{/admin/edit_user{id}(id=${user.getId()})}" th:method="GET">
-                            <input type="submit" value="Изменить"/>
-                        </form>
-                        <form th:action="@{/admin/delete_user{id}(id=${user.getId()})}" th:method="GET">
-                            <input type="submit" value="Удалить"/>
-                        </form>
-                    </td>
-                </tr>
-            </th:block>
-        </table>
+
+
+<nav class="navbar navbar-dark bg-dark text-white">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div style="font-size: large">
+                <a href="/user" class="font-weight-bold text-white" th:text="${activeUser.getEmail()}"></a>
+                <a>with roles:</a>
+                <th:block th:each="role : ${activeUser.getRoles()}">
+                    <a th:text="${role.getName()}"></a>
+                </th:block>
+            </div>
+        </div>
+        <div class="navbar-header float-right">
+            <a href="/logout" class="text-secondary">Logout</a>
+        </div>
     </div>
+</nav>
 
-    <br>
-    <form th:action="@{/admin/new_user}" th:method="GET">
-        <input type="submit" value="Добавить пользователя"/>
-    </form>
 
-    <br>
-    <form th:action="@{/user}" th:method="GET">
-        <input type="submit" value="На страницу пользователя"/>
-    </form>
+<div class="container-fluid" d-flex flex-column>
+    <div class="row flex-fill d-flex h-100 justify-content-start">
+        <div id="sidebar" class="col-2" style="background-color: white">
 
-    <br>
-    <form action="#" th:action="@{/logout}" th:method="Get">
-        <input type="submit" value="Выход"/>
-    </form>
+        </div>
+
+        <div class="col-10">
+            <div class="container-fluid">
+                <h1 style="padding-top: 5px">Admin panel</h1>
+                <div>
+                    <h2>Пользователи:</h2>
+                    <table border="1" cellpadding="5">
+                        <tr>
+                            <td>Id</td>
+                            <td>Имя</td>
+                            <td>Возраст</td>
+                            <td>e-mail</td>
+                            <td>Роль</td>
+                            <td></td>
+                        </tr>
+                        <th:block th:each="user : ${userslist}">
+                            <tr>
+                                <td th:text="${user.getId()}"></td>
+                                <td th:text="${user.getName()}"></td>
+                                <td th:text="${user.getAge()}"></td>
+                                <td th:text="${user.getEmail()}"></td>
+                                <td><p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"> /></td>
+                                <td>
+                                    <form th:action="@{/admin/edit_user{id}(id=${user.getId()})}" th:method="GET">
+                                        <input type="submit" value="Изменить"/>
+                                    </form>
+                                    <form th:action="@{/admin/delete_user{id}(id=${user.getId()})}" th:method="GET">
+                                        <input type="submit" value="Удалить"/>
+                                    </form>
+                                </td>
+                            </tr>
+                        </th:block>
+                    </table>
+                </div>
+
+                <br>
+                <form th:action="@{/admin/new_user}" th:method="GET">
+                    <input type="submit" value="Добавить пользователя"/>
+                </form>
+
+                <br>
+                <form th:action="@{/user}" th:method="GET">
+                    <input type="submit" value="На страницу пользователя"/>
+                </form>
+
+                <br>
+                <form action="#" th:action="@{/logout}" th:method="Get">
+                    <input type="submit" value="Выход"/>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
 </body>
+
 </html>

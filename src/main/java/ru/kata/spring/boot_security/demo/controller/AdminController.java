@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +28,8 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String welcome(Model model) {
+    public String welcome(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        model.addAttribute("activeUser", userService.findByUsername(userDetails.getUsername()));
         model.addAttribute("userslist", userService.findAll().stream()
                 .sorted((n, m) -> (int) (n.getId() - m.getId()))
                 .collect(Collectors.toList()));
