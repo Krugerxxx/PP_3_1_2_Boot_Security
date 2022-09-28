@@ -27,9 +27,7 @@ public class AdminController {
 
     @GetMapping()
     public String welcome(Model model) {
-        model.addAttribute("userslist", userService.findAll().stream()
-                .sorted((n, m) -> (int) (n.getId() - m.getId()))
-                .collect(Collectors.toList()));
+        model.addAttribute("userslist", userService.findAll());
         return "users/users";
     }
 
