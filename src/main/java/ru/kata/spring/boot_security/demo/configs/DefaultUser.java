@@ -30,22 +30,24 @@ public class DefaultUser {
         if (roleService.findAll().stream().noneMatch(n -> n.getName().equals("USER"))) {
             roleService.save(new Role("USER"));
         }
-        if (userService.findAll().stream().noneMatch(n -> n.getEmail().equals("user@mail.ru"))) {
-            User user = new User();
-            user.setName("user");
-            user.setAge(1);
-            user.setEmail("user@mail.ru");
-            user.setPassword("user");
-            user.setRoles(Set.of(roleService.getByName("USER")));
-            userService.save(user);
-        }
         if (userService.findAll().stream().noneMatch(n -> n.getEmail().equals("admin@mail.ru"))) {
             User user = new User();
-            user.setName("admin");
+            user.setFirstname("admin");
+            user.setLastname("admin_last");
             user.setAge(1);
             user.setEmail("admin@mail.ru");
             user.setPassword("admin");
             user.setRoles(roleService.findAll());
+            userService.save(user);
+        }
+        if (userService.findAll().stream().noneMatch(n -> n.getEmail().equals("user@mail.ru"))) {
+            User user = new User();
+            user.setFirstname("user");
+            user.setLastname("user_last");
+            user.setAge(1);
+            user.setEmail("user@mail.ru");
+            user.setPassword("user");
+            user.setRoles(Set.of(roleService.getByName("USER")));
             userService.save(user);
         }
     }

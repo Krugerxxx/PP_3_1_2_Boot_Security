@@ -21,7 +21,7 @@
             <th:block th:value="${user}">
                 <tr>
                     <td th:text="${user.getId()}"></td>
-                    <td th:text="${user.getName()}"></td>
+                    <td th:text="${user.getAge()}"></td>
                     <td th:text="${user.getAge()}"></td>
                     <td th:text="${user.getEmail()}"></td>
                     <td><p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"> /></td>

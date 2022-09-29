@@ -19,8 +19,13 @@
             </tr>
             <tr>
                 <td>Имя:</td>
-                <td><input maxlength="30" type="text" th:field="*{name}" th:value="*{name}"/></td>
+                <td><input maxlength="30" type="text" th:field="*{firstname}" th:value="*{firstname}"/></td>
             </tr>
+            <tr>
+                <td>Имя last:</td>
+                <td><input maxlength="30" type="text" th:field="*{lastname}" th:value="*{lastname}"/></td>
+            </tr>
+
             <tr>
                 <td>Возраст:</td>
                 <td><input required pattern="^[0-9]+$" maxlength="3" type="text" th:field="*{age}" th:value="*{age}"/>

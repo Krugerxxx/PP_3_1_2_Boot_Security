@@ -82,6 +82,7 @@
 
 
         <div class="col-10" sec:authorize="hasAuthority('ADMIN')">
+
             <br>
             <div class="tab-content px-3" id="tabContent">
                 <div class="tab-pane active" id="adminHome" role="tabpanel"
@@ -129,8 +130,8 @@
                                             <th:block th:each="user : ${userslist}">
                                                 <tr>
                                                     <td th:text="${user.getId()}"></td>
-                                                    <td th:text="${user.getName()}"></td>
-                                                    <td th:text="${user.getName()}"></td>
+                                                    <td th:text="${user.getFirstname()}"></td>
+                                                    <td th:text="${user.getLastname()}"></td>
                                                     <td th:text="${user.getAge()}"></td>
                                                     <td th:text="${user.getEmail()}"></td>
                                                     <td><a th:each="role : ${user.getRoles()}"
@@ -165,6 +166,7 @@
                             <tr>
                                 <td>Id</td>
                                 <td>Имя</td>
+                                <td>Имя last</td>
                                 <td>Возраст</td>
                                 <td>e-mail</td>
                                 <td>Роль</td>
@@ -173,7 +175,8 @@
                             <th:block th:each="user : ${userslist}">
                                 <tr>
                                     <td th:text="${user.getId()}"></td>
-                                    <td th:text="${user.getName()}"></td>
+                                    <td th:text="${user.getFirstname()}"></td>
+                                    <td th:text="${user.getLastname()}"></td>
                                     <td th:text="${user.getAge()}"></td>
                                     <td th:text="${user.getEmail()}"></td>
                                     <td><p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"> /></td>
@@ -206,6 +209,7 @@
                     <form action="#" th:action="@{/logout}" th:method="Get">
                         <input type="submit" value="Выход"/>
                     </form>
+
 
 
                 </div>

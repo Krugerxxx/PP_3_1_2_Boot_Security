@@ -17,10 +17,15 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Имя не может быть пустым")
-    @Size(min = 2, message = "Имя не может быть меньше 2х символов")
-    @Column(name = "name", nullable = false, length = 30)
-    private String name;
+    @NotEmpty(message = "First Name не может быть пустым")
+    @Size(min = 2, message = "First Name не может быть меньше 2х символов")
+    @Column(name = "first_name", nullable = false, length = 30)
+    private String firstname;
+
+    @NotEmpty(message = "Last Name не может быть пустым")
+    @Size(min = 2, message = "Last Name не может быть меньше 2х символов")
+    @Column(name = "last_name", nullable = false, length = 30)
+    private String lastname;
 
     @Min(value = 0, message = "Возраст не может быть меньше 0")
     @Max(value = 120, message = "Возраст не может быть больше 120")
@@ -53,12 +58,20 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public int getAge() {
@@ -88,7 +101,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getName();
+        return getEmail();
     }
 
     @Override
@@ -123,16 +136,18 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && age == user.age && Objects.equals(name, user.name) && Objects.equals(email, user.email);
+        return id == user.id && age == user.age && Objects.equals(firstname, user.firstname) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age, email);
+        return Objects.hash(id, firstname, age, email);
     }
 }
