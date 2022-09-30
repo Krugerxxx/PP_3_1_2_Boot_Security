@@ -122,7 +122,9 @@
 
                                 <!--  Добаление нового пользователя -->
 
-                                <div class="tab-pane active" id="new_user" role="tabpanel">
+                                <div class="tab-pane active"
+                                     id="new_user"
+                                     role="tabpanel">
                                     <h4 class="card-header" style="background-color: #F8F9FA">
                                         Add new user
                                     </h4>
@@ -131,9 +133,11 @@
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col offset-md-2">
-                                                    <form class="createForm" id="createForm"
+                                                    <form class="createForm"
+                                                          id="createForm"
                                                           th:action="@{/admin/new_user}"
-                                                          th:object="${user}" method="post">
+                                                          th:object="${user}"
+                                                          method="post">
                                                         <div class="form-group">
 
                                                             <div class="form-group col-6 text-center offset-md-2">

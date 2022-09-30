@@ -13,7 +13,6 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 
 @Controller
 @RequestMapping("/admin")
@@ -52,7 +51,8 @@ public class AdminController {
         model.addObject("activeUser", userService.findByUsername(userDetails.getUsername()));
         model.addObject("roleName", roleService.findAll());
         if (result.hasErrors()) {
-            model.setViewName("users/new_user");
+            System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
+            model.setViewName("users/users");
             return model;
         }
 
@@ -66,30 +66,24 @@ public class AdminController {
         return model;
     }
 
-    @RequestMapping(value = "/edit_user{id}", method = RequestMethod.GET)
-    public ModelAndView editUserForm(@PathVariable(value = "id") Long id, ModelAndView model) {
-        model.addObject("user", userService.findById(id));
-        model.addObject("roleName", roleService.findAll());
-        model.setViewName("users/edit_user");
-        return model;
-    }
-
     @PostMapping(value = "/edit_user{id}")
     public ModelAndView editUser(@ModelAttribute(value = "user") @Valid User user,
                                  BindingResult result,
                                  ModelAndView model) {
         model.addObject("roleName", roleService.findAll());
         if (result.hasErrors()) {
-            model.setViewName("users/edit_user");
+            System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
+            model.setViewName("users/users");
             return model;
         }
 
+        //TODO подумать, что с этим можно сделать в последней версии, пока переадресация на страницу пользователя
         String enterEmail = user.getEmail();
         if (userService.save(user).getEmail() == "") {
             model.addObject("emailExists", "Такой email существует: " + enterEmail);
             user.setEmail(userService.findById(user.getId()).getEmail());
             model.addObject("user", user);
-            model.setViewName("/users/edit_user");
+            model.setViewName("redirect:/admin");
             return model;
         }
         model.setViewName("redirect:/admin");
@@ -101,5 +95,14 @@ public class AdminController {
         userService.deleteById(id);
         return "redirect:/admin";
     }
+
+    /*TODO посмотри потребуется ли он в последней версии
+    @RequestMapping(value = "/edit_user{id}", method = RequestMethod.GET)
+    public ModelAndView editUserForm(@PathVariable(value = "id") Long id, ModelAndView model) {
+        model.addObject("user", userService.findById(id));
+        model.addObject("roleName", roleService.findAll());
+        model.setViewName("users/edit_user");
+        return model;
+    }*/
 
 }
