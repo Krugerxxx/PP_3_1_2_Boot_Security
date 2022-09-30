@@ -7,11 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserRepo;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
-import javax.transaction.Transactional;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,14 +32,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(User user) {
-        try {
-            if (user.getId() != null && user.getPassword() == "") {
-                user.setPassword(userRepo.findById(user.getId()).get().getPassword());
-            } else {
-                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            }
+        if (user.getId() != null && user.getPassword() == "") {
+            user.setPassword(userRepo.findById(user.getId()).get().getPassword());
+        } else {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
+        if (!existEmail(user.getEmail()) ||
+                (existEmail(user.getEmail()) && findByUsername(user.getEmail()).getId() == user.getId())) {
             userRepo.save(user);
-        } catch (Exception e) {
+        } else {
             user.setEmail("");
         }
         return user;
@@ -81,4 +85,12 @@ public class UserServiceImpl implements UserService {
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(n -> new SimpleGrantedAuthority(n.getName())).collect(Collectors.toList());
     }
+
+    private boolean existEmail(String email) {
+        if (findByUsername(email) != null) {
+            return true;
+        }
+        return false;
+    }
+
 }

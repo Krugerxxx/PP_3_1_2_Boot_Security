@@ -13,6 +13,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/admin")
@@ -27,14 +28,16 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String welcome(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String welcome(@AuthenticationPrincipal UserDetails userDetails, Model model, User user) {
+        model.addAttribute("roleName", roleService.findAll());
         model.addAttribute("activeUser", userService.findByUsername(userDetails.getUsername()));
         model.addAttribute("userslist", userService.findAll());
         return "users/users";
     }
 
     @RequestMapping(value = "/new_user", method = RequestMethod.GET)
-    public ModelAndView newUserForm(ModelAndView model, User user) {
+    public ModelAndView newUserForm(@AuthenticationPrincipal UserDetails userDetails, ModelAndView model, User user) {
+        model.addObject("activeUser", userService.findByUsername(userDetails.getUsername()));
         model.addObject("user", user);
         model.addObject("roleName", roleService.findAll());
         model.setViewName("users/new_user");
@@ -44,7 +47,9 @@ public class AdminController {
     @RequestMapping(value = "/new_user", method = RequestMethod.POST)
     public ModelAndView newUserSubmit(@ModelAttribute(value = "user") @Valid User user,
                                       BindingResult result,
-                                      ModelAndView model) {
+                                      ModelAndView model,
+                                      @AuthenticationPrincipal UserDetails userDetails) {
+        model.addObject("activeUser", userService.findByUsername(userDetails.getUsername()));
         model.addObject("roleName", roleService.findAll());
         if (result.hasErrors()) {
             model.setViewName("users/new_user");
@@ -69,18 +74,24 @@ public class AdminController {
         return model;
     }
 
-    @RequestMapping(value = "/edit_user{id}", method = RequestMethod.POST)
+    @PostMapping(value = "/edit_user{id}")
     public ModelAndView editUser(@ModelAttribute(value = "user") @Valid User user,
                                  BindingResult result,
                                  ModelAndView model) {
+        System.out.println("!!!");
+        System.out.println(user.getId());
+        System.out.println(user.getAge());
         model.addObject("roleName", roleService.findAll());
         if (result.hasErrors()) {
+            System.out.println("<<<<");
+            result.getModel().forEach((n ,m) -> System.out.println(n + " " + m));
             model.setViewName("users/edit_user");
             return model;
         }
 
         String enterEmail = user.getEmail();
         if (userService.save(user).getEmail() == "") {
+            System.out.println(">>>>");
             model.addObject("emailExists", "Такой email существует: " + enterEmail);
             user.setEmail(userService.findById(user.getId()).getEmail());
             model.addObject("user", user);

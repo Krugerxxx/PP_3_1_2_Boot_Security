@@ -50,6 +50,7 @@ public class User implements UserDetails {
     public User() {
     }
 
+
     public Long getId() {
         return id;
     }
@@ -150,4 +151,5 @@ public class User implements UserDetails {
     public int hashCode() {
         return Objects.hash(id, firstname, age, email);
     }
+
 }
