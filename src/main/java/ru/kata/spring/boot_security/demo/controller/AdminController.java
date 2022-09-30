@@ -96,6 +96,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+
     /*TODO посмотри потребуется ли он в последней версии
     @RequestMapping(value = "/edit_user{id}", method = RequestMethod.GET)
     public ModelAndView editUserForm(@PathVariable(value = "id") Long id, ModelAndView model) {
