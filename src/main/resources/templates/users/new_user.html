@@ -36,6 +36,10 @@
             padding: 0px;
         }
 
+        input:invalid {
+            background-color: #FFEB99;
+        }
+
     </style>
 </head>
 <body>
@@ -141,12 +145,14 @@
                                                                     <tr>
                                                                         <div class="form-group text-center">
                                                                             <strong>First name</strong>
-                                                                            <input type="text" class="form-control"
+                                                                            <input th:type="text"
+                                                                                   class="form-control"
                                                                                    th:field="*{firstname}"
-                                                                                   id="input-firstName"
+                                                                                   name="firstname"
                                                                                    required
                                                                                    minlength="2"
                                                                                    maxlength="50"
+                                                                                   pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
                                                                                    placeholder="First name">
                                                                         </div>
                                                                     </tr>
@@ -154,12 +160,14 @@
                                                                     <tr>
                                                                         <div class="form-group text-center">
                                                                             <strong>Last name</strong>
-                                                                            <input type="text" class="form-control"
+                                                                            <input th:type="text"
+                                                                                   class="form-control"
                                                                                    th:field="*{lastname}"
-                                                                                   id="input-lastName"
+                                                                                   name="lastname"
                                                                                    required
                                                                                    minlength="2"
                                                                                    maxlength="50"
+                                                                                   pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
                                                                                    placeholder="Last name">
                                                                         </div>
                                                                     </tr>
@@ -167,8 +175,10 @@
                                                                     <tr>
                                                                         <div class="form-group text-center">
                                                                             <strong>Age</strong>
-                                                                            <input type="number" class="form-control"
-                                                                                   th:field="*{age}" id="input-age"
+                                                                            <input th:type="number"
+                                                                                   class="form-control"
+                                                                                   th:field="*{age}"
+                                                                                   name="age"
                                                                                    required
                                                                                    min="0"
                                                                                    max="120"
@@ -179,8 +189,10 @@
                                                                     <tr>
                                                                         <div class="form-group text-center">
                                                                             <strong>Email</strong>
-                                                                            <input type="text" class="form-control"
-                                                                                   th:field="*{email}" id="input-email"
+                                                                            <input th:type="email"
+                                                                                   class="form-control"
+                                                                                   th:field="*{email}"
+                                                                                   name="email"
                                                                                    required
                                                                                    placeholder="Email">
                                                                         </div>
@@ -189,9 +201,10 @@
                                                                     <tr>
                                                                         <div class="form-group text-center">
                                                                             <strong>Password</strong>
-                                                                            <input type="password" class="form-control"
+                                                                            <input th:type="password"
+                                                                                   class="form-control"
                                                                                    th:field="*{password}"
-                                                                                   id="input-password"
+                                                                                   name="password"
                                                                                    required
                                                                                    minlength="3"
                                                                                    maxlength="50"
@@ -203,9 +216,11 @@
                                                                     <tr>
                                                                         <div class="form-group text-center">
                                                                             <strong>Role</strong>
-                                                                            <select class="custom-select" multiple
+                                                                            <select class="custom-select"
+                                                                                    multiple
                                                                                     size="2"
-                                                                                    th:field="*{roles}" required>
+                                                                                    th:field="*{roles}"
+                                                                                    required>
                                                                                 <option th:each="role: ${roleName}"
                                                                                         th:text="${role.name}"
                                                                                         th:value="${role.id}">

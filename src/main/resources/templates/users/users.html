@@ -36,6 +36,10 @@
             padding: 0px;
         }
 
+        input:invalid {
+            background-color: #FFEB99;
+        }
+
     </style>
 </head>
 <body>
@@ -197,6 +201,7 @@
                                                                                                    required
                                                                                                    minlength="2"
                                                                                                    maxlength="50"
+                                                                                                   pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
                                                                                                    placeholder="First name">
                                                                                         </div>
                                                                                     </tr>
@@ -211,6 +216,7 @@
                                                                                                    required
                                                                                                    minlength="2"
                                                                                                    maxlength="50"
+                                                                                                   pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
                                                                                                    placeholder="Last name">
                                                                                         </div>
                                                                                     </tr>
@@ -246,9 +252,8 @@
                                                                                             <strong>Password</strong>
                                                                                             <input th:type="password"
                                                                                                    class="form-control"
-                                                                                                   th:value="*{password}"
+                                                                                                   th:field="*{password}"
                                                                                                    name="password"
-                                                                                                   required
                                                                                                    minlength="3"
                                                                                                    maxlength="50"
                                                                                                    placeholder="Password">
@@ -271,7 +276,6 @@
                                                                                                         th:selected="${user.roles.contains(role)}">
                                                                                                     <th:block
                                                                                                             th:text="${role.name}">
-
                                                                                                     </th:block>
                                                                                                 </option>
                                                                                             </select>
@@ -310,8 +314,151 @@
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                                data-target="#deleteModal">Delete
+                                                                th:attr="data-target='#deleteModal'+${user.id}">Delete
                                                         </button>
+
+                                                        <div class="modal fade" th:attr="id='deleteModal' + ${user.id}"
+                                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                                                            <div class="modal-dialog" modal-dialog-centered>
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title font-weight-bold"
+                                                                            id="deleteModalLabel">Delete
+                                                                            user</h5>
+                                                                        <button type="button" class="btn-close"
+                                                                                data-dismiss="modal"
+                                                                                aria-label="Close">X
+                                                                        </button>
+                                                                    </div>
+                                                                    <form th:action="@{/admin/delete_user{id} (id=${user.id})}"
+                                                                    th:object="${user}">
+
+                                                                        <div class="modal-body">
+
+                                                                            <!--col-4 text-center offset-md-2-->
+                                                                            <div class="container col-6 text-center offset-md-3">
+                                                                                <table>
+
+                                                                                    <tr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <strong>ID</strong>
+                                                                                            <input th:type="text"
+                                                                                                   class="form-control"
+                                                                                                   th:value="*{id}"
+                                                                                                   name="id"
+                                                                                                   readonly>
+                                                                                        </div>
+                                                                                    </tr>
+
+                                                                                    <tr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <strong>First name</strong>
+                                                                                            <input th:type="text"
+                                                                                                   class="form-control"
+                                                                                                   th:value="*{firstname}"
+                                                                                                   name="firstname"
+                                                                                                   readonly
+                                                                                                   placeholder="First name">
+                                                                                        </div>
+                                                                                    </tr>
+
+                                                                                    <tr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <strong>Last name</strong>
+                                                                                            <input th:type="text"
+                                                                                                   class="form-control"
+                                                                                                   th:value="*{lastname}"
+                                                                                                   name="lastname"
+                                                                                                   readonly
+                                                                                                   placeholder="Last name">
+                                                                                        </div>
+                                                                                    </tr>
+
+                                                                                    <tr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <strong>Age</strong>
+                                                                                            <input th:type="number"
+                                                                                                   class="form-control"
+                                                                                                   th:value="*{age}"
+                                                                                                   name="age"
+                                                                                                   readonly
+                                                                                                   placeholder="Age">
+                                                                                        </div>
+                                                                                    </tr>
+
+                                                                                    <tr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <strong>Email</strong>
+                                                                                            <input th:type="email"
+                                                                                                   class="form-control"
+                                                                                                   th:value="*{email}"
+                                                                                                   name="email"
+                                                                                                   readonly
+                                                                                                   placeholder="Email">
+                                                                                        </div>
+                                                                                    </tr>
+
+                                                                                    <tr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <strong>Password</strong>
+                                                                                            <input th:type="password"
+                                                                                                   class="form-control"
+                                                                                                   th:field="*{password}"
+                                                                                                   name="password"
+                                                                                                   readonly
+                                                                                                   placeholder="Password">
+                                                                                        </div>
+                                                                                    </tr>
+
+
+                                                                                    <tr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <strong>Role</strong>
+                                                                                            <select class="custom-select"
+                                                                                                    th:value="*{roles}"
+                                                                                                    name="roles"
+                                                                                                    size="2"
+                                                                                                    disabled>
+
+                                                                                                <option th:each="role: ${roleName}"
+                                                                                                        th:value="${role.id}"
+                                                                                                        th:selected="${user.roles.contains(role)}">
+                                                                                                    <th:block
+                                                                                                            th:text="${role.name}">
+                                                                                                    </th:block>
+                                                                                                </option>
+                                                                                            </select>
+                                                                                        </div>
+
+                                                                                    </tr>
+
+                                                                                </table>
+                                                                            </div>
+
+                                                                        </div>
+
+
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-dismiss="modal">Close
+                                                                            </button>
+                                                                            <button type="submit"
+                                                                                    class="btn btn-danger">
+                                                                                Delete
+                                                                            </button>
+
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+
+                                                            </div>
+
+
+                                                        </div>
+
+
                                                     </td>
 
 

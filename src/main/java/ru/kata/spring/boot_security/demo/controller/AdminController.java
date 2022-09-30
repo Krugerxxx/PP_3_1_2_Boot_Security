@@ -78,20 +78,14 @@ public class AdminController {
     public ModelAndView editUser(@ModelAttribute(value = "user") @Valid User user,
                                  BindingResult result,
                                  ModelAndView model) {
-        System.out.println("!!!");
-        System.out.println(user.getId());
-        System.out.println(user.getAge());
         model.addObject("roleName", roleService.findAll());
         if (result.hasErrors()) {
-            System.out.println("<<<<");
-            result.getModel().forEach((n ,m) -> System.out.println(n + " " + m));
             model.setViewName("users/edit_user");
             return model;
         }
 
         String enterEmail = user.getEmail();
         if (userService.save(user).getEmail() == "") {
-            System.out.println(">>>>");
             model.addObject("emailExists", "Такой email существует: " + enterEmail);
             user.setEmail(userService.findById(user.getId()).getEmail());
             model.addObject("user", user);
