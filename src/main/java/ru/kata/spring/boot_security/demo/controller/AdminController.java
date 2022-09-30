@@ -14,7 +14,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
 
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
     private UserService userService;
