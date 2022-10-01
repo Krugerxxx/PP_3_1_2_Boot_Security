@@ -1,4 +1,4 @@
-//Получение текущего пользователя и сопутствующая ему инициализация
+//Работа с данными текущего пользователя
 let currentUser = {
     user: {},
     getUser: async () => {
@@ -14,7 +14,7 @@ let currentUser = {
         updateHeader();
         updateCurrentUserInfo()
 
-    },
+    },*/
     hasRole: (name) => {
         let result = false
         currentUser.user.roles.forEach(role => {
@@ -23,7 +23,7 @@ let currentUser = {
             }
         })
         return result
-    },*/
+    },
 
     getRoles: () => {
         let roles = []
@@ -53,15 +53,14 @@ async function updateUserPage() {
 }
 
 
-//
-/*
+//Работа со списком пользователей
 let users = {
     userMap: new Map(),
     update: async () => {
-        let userList = await fetch('/api/admin/users').then(response => response.json())
+        let userList = await fetch('/api/users').then(response => response.json())
         userList.forEach(user => users.userMap.set(user.id, user))
         updateUserTable()
-    },
+    }/*,
     remove: async (id) => {
         users.userMap.delete(id)
         updateUserTable()
@@ -69,44 +68,46 @@ let users = {
     save: async (user) => {
         users.userMap.set(user.id, user)
         updateUserTable()
-    }
+    }*/
 }
-*/
+
 
 //Список всех ролей
 /*
 let allRoles = {
     list: [],
     update: async () => {
-        allRoles.list = await fetch('/api/admin/roles')
+        allRoles.list = await fetch('/api/roles')
             .then(response => response.json())
         await updateRolesInNewUserForm()
     }
-}*/
-
-
-/*
-async function updateUserTable() {
-    let table = $("#userTable tbody")
-    table.html("")
-    users.userMap.forEach(user => {
-        let button_edit   = '<button class="btn btn-info user-edit-button" data-toggle="modal" data-target="#userEditModal" data-user-id="'+user.id+'">Edit</button> '
-        let button_delete = '<button class="btn btn-danger user-delete-button" data-toggle="modal" data-target="#userDeleteModal" data-user-id="'+user.id+'">Delete</button>'
-        let roles = []
-        user.roles.forEach(role => roles.push(role.label))
-        let row = "<tr>" +
-            "<td>"+user.id+"</td>" +
-            "<td>"+user.name+"</td>" +
-            "<td>"+user.username+"</td>" +
-            "<td>"+roles+"</td>" +
-            "<td>"+((user.enabled) ? "Yes" : "No")+"</td>" +
-            "<td>"+button_edit+" "+button_delete+"</td>" +
-            "</tr>"
-
-        table.append(row)
-    })
 }
 */
+
+
+//Обновление списка пользователей
+async function updateUserTable() {
+    let table = $("#users-table tbody")
+    table.html("")
+    users.userMap.forEach(user => {
+        let button_edit   = '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#editmodal" data-user-id="'+user.id+'">Edit</button> '
+        let button_delete = '<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-user-id="'+user.id+'">Delete</button>'
+        let roles = []
+        user.roles.forEach(role => roles.push(role.name))
+        let value = "<tr>" +
+            "<td>"+user.id+"</td>" +
+            "<td>"+user.firstname+"</td>" +
+            "<td>"+user.lastname+"</td>" +
+            "<td>"+user.age+"</td>" +
+            "<td>"+user.email+"</td>" +
+            "<td>"+roles+"</td>" +
+            "<td>"+button_edit+"</td>" +
+            "<td>"+button_delete+"</td>" +
+            "</tr>"
+        table.append(value)
+    })
+}
+
 
 
 
@@ -117,13 +118,14 @@ async function updateRolesInNewUserForm() {
     select.html('')
     allRoles.list.forEach(role => select.append("<option value='"+role.name+"'>"+role.label))
 }
-
 */
+
 
 
 
 $(document).ready(async function () {
 
+    //Установление значения левой панели
     let page = location.pathname.substring(1)
     if (page == 'admin') {
         $('#home-tab').tab('show')
@@ -140,5 +142,11 @@ $(document).ready(async function () {
     //Получение текущего пользователя и сопутствующая ему инициализация
     await currentUser.getUser()
 
+
+    //Обновление списка пользователей
+    if (currentUser.hasRole('ADMIN')) {
+        await users.update()
+    }
+    //       await allRoles.update()
 
 });
