@@ -19,7 +19,7 @@
     <!-- My config -->
     <script type="text/javascript" src="/jquery-3.6.1.js"></script>
     <script type="text/javascript" src="/script.js"></script>
-    <link rel="stylesheet"  href="/style.css"/>
+    <link rel="stylesheet" href="/style.css"/>
 
     <title>Users</title>
 
@@ -32,14 +32,14 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <div style="font-size: large">
-                <a href="/admin" class="font-weight-bold text-white" th:text="${activeUser.getEmail()}"
+                <a href="/admin" class="font-weight-bold text-white"
+                   id="currentUserName1"
                    sec:authorize="hasAuthority('ADMIN')"></a>
-                <a href="/user" class="font-weight-bold text-white" th:text="${activeUser.getEmail()}"
+                <a href="/user" class="font-weight-bold text-white"
+                   id="currentUserName2"
                    sec:authorize="!hasAuthority('ADMIN')"></a>
                 <a>with roles:</a>
-                <th:block th:each="role : ${activeUser.getRoles()}">
-                    <a th:text="${role.getName()}"></a>
-                </th:block>
+                <a id="currentUserRoles"></a>
             </div>
         </div>
         <div class="navbar-header float-right">
@@ -57,12 +57,34 @@
         <div id="sidebar" class="col-2 bg-white">
             <br>
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link active" id="home-tab" href="/admin" role="tab"
-                   aria-selected="true"> <!-- data-toggle="pill"   aria-controls="home"-->
+                <a class="nav-link active"
+                   id="home-tab"
+                   href="#adminHome"
+                   role="tab"
+                   data-toggle="pill"
+                   aria-controls="home"
+                   aria-selected="true"
+                   sec:authorize="hasAuthority('ADMIN')">
                     Admin
                 </a>
-                <a class="nav-link" id="profile-tab" href="/user" role="tab"
-                   aria-selected="false"> <!-- data-toggle="pill"     aria-controls="profile"-->
+                <a class="nav-link"
+                   id="profile-tab"
+                   href="#profile"
+                   role="tab"
+                   data-toggle="pill"
+                   aria-controls="profile"
+                   aria-selected="false"
+                   sec:authorize="hasAuthority('ADMIN')">
+                    User
+                </a>
+                <a class="nav-link active"
+                   id="profile-tab-u"
+                   href="#profile-u"
+                   role="tab"
+                   data-toggle="pill"
+                   aria-controls="profile-u"
+                   aria-selected="true"
+                   sec:authorize="!hasAuthority('ADMIN')">
                     User
                 </a>
             </div>
@@ -75,7 +97,9 @@
             <br>
             <div class="tab-content px-3" id="tabContent">
 
-                <div class="tab-pane active" id="adminHome" role="tabpanel">
+
+                <div class="tab-pane active" id="adminHome" role="tabpanel" aria-labelledby="home-tab"
+                     sec:authorize="hasAuthority('ADMIN')">
                     <h1>Admin panel</h1>
 
                     <!-- Меню-->
@@ -138,161 +162,11 @@
                                                         <button type="button"
                                                                 class="btn btn-info"
                                                                 data-toggle="modal"
-                                                                th:attr="data-target='#editModal'+${user.id}">
+                                                                data-target="#editmodal"
+                                                                th:id="editbutton+${user.id}">
+                                                            <!--th:attr="data-target='#editModal'+${user.id}"-->
                                                             Edit
                                                         </button>
-
-                                                        <div class="modal fade"
-                                                             th:attr="id='editModal' + ${user.id}"
-                                                             aria-labelledby="exampleModalLabel"
-                                                             aria-hidden="true">
-
-                                                            <div class="modal-dialog" modal-dialog-centered>
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title font-weight-bold"
-                                                                            id="editModalLabel">
-                                                                            Edit user
-                                                                        </h5>
-                                                                        <button type="button"
-                                                                                class="close"
-                                                                                data-dismiss="modal"
-                                                                                aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <form th:action="@{/admin/edit_user{id} (id=${user.id})}"
-                                                                          th:object="${user}"
-                                                                          th:method="POST">
-
-                                                                        <div class="modal-body">
-                                                                            <div class="container col-6 text-center offset-md-3">
-                                                                                <table>
-
-                                                                                    <tr>
-                                                                                        <div class="form-group text-center">
-                                                                                            <strong>ID</strong>
-                                                                                            <input th:type="text"
-                                                                                                   class="form-control"
-                                                                                                   th:value="*{id}"
-                                                                                                   name="id"
-                                                                                                   readonly>
-                                                                                        </div>
-                                                                                    </tr>
-
-                                                                                    <tr>
-                                                                                        <div class="form-group text-center">
-                                                                                            <strong>First name</strong>
-                                                                                            <input th:type="text"
-                                                                                                   class="form-control"
-                                                                                                   th:value="*{firstname}"
-                                                                                                   name="firstname"
-                                                                                                   required
-                                                                                                   minlength="2"
-                                                                                                   maxlength="50"
-                                                                                                   pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
-                                                                                                   placeholder="First name">
-                                                                                        </div>
-                                                                                    </tr>
-
-                                                                                    <tr>
-                                                                                        <div class="form-group text-center">
-                                                                                            <strong>Last name</strong>
-                                                                                            <input th:type="text"
-                                                                                                   class="form-control"
-                                                                                                   th:value="*{lastname}"
-                                                                                                   name="lastname"
-                                                                                                   required
-                                                                                                   minlength="2"
-                                                                                                   maxlength="50"
-                                                                                                   pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
-                                                                                                   placeholder="Last name">
-                                                                                        </div>
-                                                                                    </tr>
-
-                                                                                    <tr>
-                                                                                        <div class="form-group text-center">
-                                                                                            <strong>Age</strong>
-                                                                                            <input th:type="number"
-                                                                                                   class="form-control"
-                                                                                                   th:value="*{age}"
-                                                                                                   name="age"
-                                                                                                   required
-                                                                                                   min="0"
-                                                                                                   max="120"
-                                                                                                   placeholder="Age">
-                                                                                        </div>
-                                                                                    </tr>
-
-                                                                                    <tr>
-                                                                                        <div class="form-group text-center">
-                                                                                            <strong>Email</strong>
-                                                                                            <input th:type="email"
-                                                                                                   class="form-control"
-                                                                                                   th:value="*{email}"
-                                                                                                   name="email"
-                                                                                                   required
-                                                                                                   placeholder="Email">
-                                                                                        </div>
-                                                                                    </tr>
-
-                                                                                    <tr>
-                                                                                        <div class="form-group text-center">
-                                                                                            <strong>Password</strong>
-                                                                                            <input th:type="password"
-                                                                                                   class="form-control"
-                                                                                                   th:field="*{password}"
-                                                                                                   name="password"
-                                                                                                   minlength="3"
-                                                                                                   maxlength="50"
-                                                                                                   placeholder="Password">
-                                                                                        </div>
-                                                                                    </tr>
-
-
-                                                                                    <tr>
-                                                                                        <div class="form-group text-center">
-                                                                                            <strong>Role</strong>
-                                                                                            <select class="custom-select"
-                                                                                                    th:value="*{roles}"
-                                                                                                    name="roles"
-                                                                                                    multiple
-                                                                                                    size="2"
-                                                                                                    required>
-
-                                                                                                <option th:each="role: ${roleName}"
-                                                                                                        th:value="${role.id}"
-                                                                                                        th:selected="${user.roles.contains(role)}">
-                                                                                                    <th:block
-                                                                                                            th:text="${role.name}">
-                                                                                                    </th:block>
-                                                                                                </option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </div>
-                                                                        </div>
-
-
-                                                                        <div class="modal-footer">
-                                                                            <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-dismiss="modal">
-                                                                                Close
-                                                                            </button>
-                                                                            <button type="submit"
-                                                                                    class="btn btn-primary editBTN">
-                                                                                Edit
-                                                                            </button>
-
-
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </td>
 
 
@@ -463,6 +337,17 @@
                 </div>
 
 
+                <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab"
+                     sec:authorize="hasAuthority('ADMIN')">
+                    <div th:insert="fragments/current_user_info :: profile"></div>
+                </div>
+
+                <div class="tab-pane active" id="profile-u" role="tabpanel" aria-labelledby="profile-tab-u"
+                     sec:authorize="!hasAuthority('ADMIN')">
+                    <div th:insert="fragments/current_user_info :: profile"></div>
+                </div>
+
+
             </div>
         </div>
 
@@ -470,6 +355,7 @@
     </div>
 </div>
 
+<div th:insert="fragments/modal_edit_user :: editmodal"></div>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
