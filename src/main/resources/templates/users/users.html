@@ -56,14 +56,15 @@
 
         <div id="sidebar" class="col-2 bg-white">
             <br>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="nav flex-column nav-pills" id="left-menu" role="tablist" aria-orientation="vertical">
                 <a class="nav-link active"
                    id="home-tab"
                    href="#adminHome"
                    role="tab"
                    data-toggle="pill"
                    aria-controls="home"
-                   aria-selected="true">
+                   aria-selected="true"
+                   sec:authorize="hasAuthority('ADMIN')">
                     Admin
                 </a>
                 <a class="nav-link"
@@ -104,7 +105,7 @@
                 <div class="tab-pane"
                      id="profile"
                      role="tabpanel"
-                     ria-labelledby="profile-tab">
+                     aria-labelledby="profile-tab">
 
                     <div th:insert="fragments/current_user_info :: profile"></div>
 
