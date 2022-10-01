@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="usersList">
+
+    <h4 class="card-header" style="background-color: #F8F9FA">
+        All users
+    </h4>
+    <div class="card-body">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="user : ${userslist}">
+                <tr>
+                    <td th:text="${user.getId()}"></td>
+                    <td th:text="${user.getFirstname()}"></td>
+                    <td th:text="${user.getLastname()}"></td>
+                    <td th:text="${user.getAge()}"></td>
+                    <td th:text="${user.getEmail()}"></td>
+                    <td><a th:each="role : ${user.getRoles()}"
+                           th:text="${role.getName() + ' '}"/>
+                    </td>
+
+                    <!-- Кнопка и модальное окно для редактирования пользователя-->
+
+                    <td>
+                        <button type="button"
+                                class="btn btn-info"
+                                data-toggle="modal"
+                                data-target="#editmodal"
+                                th:id="editbutton+${user.id}">
+                            <!--th:attr="data-target='#editModal'+${user.id}"-->
+                            Edit
+                        </button>
+                    </td>
+
+
+                    <!-- Кнопка и модальное окно для удаления пользователя-->
+
+
+                    <td>
+                        <button type="button"
+                                class="btn btn-danger"
+                                data-toggle="modal"
+                                data-target="#deleteModal">
+                            <!-- th:attr="data-target='#deleteModal'+${user.id}" -->
+                            Delete
+                        </button>
+
+
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+</body>
+</html>

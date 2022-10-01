@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="adminHome">
+
+    <h1>Admin panel</h1>
+
+    <!-- Меню админа-->
+
+    <div class="py-1 bg-light">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active"
+                   id="users-tab"
+                   href="#usersList"
+                   role="tab"
+                   aria-controls="nav-home"
+                   aria-selected="true"
+                   data-toggle="tab">
+                    Users Table
+                </a>
+                <a class="nav-item nav-link"
+                   id="nav-profile-tab"
+                   href="#newuser"
+                   role="tab"
+                   aria-controls="nav-profile"
+                   aria-selected="false"
+                   data-toggle="tab">
+                    New User
+                </a>
+            </div>
+        </nav>
+
+        <!--  Список пользователей -->
+
+        <div class="card">
+            <div class="tab-content" id="navTabContent">
+
+
+                <!--Вкладка списка пользователей-->
+                <div class="tab-pane active"
+                     id="usersList"
+                     role="tabpanel">
+
+                    <div th:insert="fragments/all_users_info :: usersList"></div>
+
+                </div>
+
+                <!--Вкладка создания нового пользователя-->
+                <div class="tab-pane"
+                     id="newuser"
+                     role="tabpanel">
+
+                    <div th:insert="fragments/new_user :: newuser"></div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
