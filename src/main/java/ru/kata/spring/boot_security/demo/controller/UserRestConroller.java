@@ -1,6 +1,10 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,14 +16,14 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
-public class RestControllers {
+@RequestMapping("/api/users")
+public class UserRestConroller {
 
     private UserService userService;
     private RoleService roleService;
 
     @Autowired
-    public RestControllers(UserService userService, RoleService roleService) {
+    public UserRestConroller(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
@@ -31,15 +35,18 @@ public class RestControllers {
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
-        return userService.findById(id);
+    public ResponseEntity<User> getById(@PathVariable Long id) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Redirect-Ref", "/admin");
+        return new ResponseEntity<>(userService.findById(id), httpHeaders, HttpStatus.OK);
+        //return userService.findById(id);
     }
 
     /*TODO возвращаемое значение должно быть id созданного юзера --  в заголовке Location: /:entity/:new_id
       TODO в случае ошибки здесь могу отправить о существующем email */
     @PostMapping()
     public ModelAndView addUser(@RequestBody @Valid User user,
-                                      BindingResult result) {
+                                BindingResult result) {
         if (result.hasErrors()) {
             System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
             return null;
@@ -75,7 +82,6 @@ public class RestControllers {
 
         return null;
     }
-
 
     @DeleteMapping(value = "/{id}")
     public String deleteUser(@PathVariable Long id) {

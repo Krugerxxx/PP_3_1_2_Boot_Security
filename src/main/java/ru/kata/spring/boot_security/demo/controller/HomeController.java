@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
-//@Controller
+@Controller
 public class HomeController {
 
 
     //TODO найти как перенаправить в конфиге security
- /*   @GetMapping(value = "/")
+    @GetMapping(value = "/")
     public String home() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!authentication.isAuthenticated()){
@@ -24,7 +24,7 @@ public class HomeController {
         } else {
             return "redirect:/user";
         }
-    }*/
+    }
 
 /*    @GetMapping("/logout")
     public String logout(HttpServletRequest request) {

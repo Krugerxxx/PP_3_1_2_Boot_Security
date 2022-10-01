@@ -1,0 +1,21 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #F8F9FA;
+}
+
+.container-fluid {
+    flex: 1;
+}
+
+#sidebar {
+    flex-direction: column;
+    padding: 0px;
+}
+
+input:invalid {
+    background-color: #FFEB99;
+}
