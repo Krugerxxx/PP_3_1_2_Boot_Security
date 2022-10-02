@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.exeption_handling.IncorrectDataException;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
@@ -29,7 +30,6 @@ public class UserRestConroller {
         this.roleService = roleService;
     }
 
-
     @GetMapping()
     public List<User> getAll() {
         return userService.findAll();
@@ -42,61 +42,37 @@ public class UserRestConroller {
         return new ResponseEntity<>(userService.findById(id), httpHeaders, HttpStatus.OK);
     }
 
-
-    /*TODO возвращаемое значение должно быть id созданного юзера --  в заголовке Location: /:entity/:new_id
-      TODO в случае ошибки здесь могу отправить о существующем email */
     @PostMapping()
     public User addUser(@RequestBody @Valid User user,
-                                BindingResult result) {
+                        BindingResult result) {
 
         Set<Role> roles = new HashSet<>();
-        for(Role role : user.getRoles()) {
+        for (Role role : user.getRoles()) {
             roles.add(roleService.getByName(role.getName()));
         }
         user.setRoles(roles);
 
         if (result.hasErrors()) {
-            System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
-            return null;
+            throw new IncorrectDataException();
         }
-
-        String enterEmail = user.getEmail();
-        if (userService.save(user).getEmail() == "") {
-            System.out.println("Такой email существует: " + enterEmail);
-            return null;
-        }
-        return user;
+        return userService.save(user);
     }
 
-
-    //TODO что возвращать
-    // TODO в случае ошибки здесь могу отправить о существующем email
     @PatchMapping(value = "/{id}")
     public User editUser(@RequestBody @Valid User user,
-                                 BindingResult result,
-                                 @PathVariable Long id) {
+                         BindingResult result) {
 
         Set<Role> roles = new HashSet<>();
-        for(Role role : user.getRoles()) {
+        for (Role role : user.getRoles()) {
             roles.add(roleService.getByName(role.getName()));
         }
         user.setRoles(roles);
 
-
         if (result.hasErrors()) {
-            System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
-            return null;
+            throw new IncorrectDataException();
         }
-
-        //TODO подумать, что с этим можно сделать в последней версии, пока переадресация на страницу пользователя
-        String enterEmail = user.getEmail();
-        user = userService.save(user);
-        if (user.getEmail() == "") {
-            System.out.println("Такой email существует: " + enterEmail);
-            return null;
-        }
-
-        return user;
+        
+        return userService.save(user);
     }
 
     @DeleteMapping(value = "/{id}")

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserRepo;
+import ru.kata.spring.boot_security.demo.exeption_handling.EmailExistsException;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
                 (existEmail(user.getEmail()) && findByUsername(user.getEmail()).getId() == user.getId())) {
             userRepo.save(user);
         } else {
-            user.setEmail("");
+            throw new EmailExistsException();
         }
         return user;
     }

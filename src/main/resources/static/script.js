@@ -8,13 +8,6 @@ let currentUser = {
         updateUserPage()
     },
 
-    /*update: async () => {
-        currentUser.user = await fetch('/api/user')
-            .then(response => response.json())
-        updateHeader();
-        updateCurrentUserInfo()
-
-    },*/
     hasRole: (name) => {
         let result = false
         currentUser.user.roles.forEach(role => {
@@ -196,6 +189,15 @@ $(document).ready(async function () {
             $('#editmodal').modal('hide');
             this.reset()
         }
+
+        if (response.status == 409) {
+            $('#edituser-error').text('Такой email существует')
+        }
+
+        if (response.status == 406) {
+            $('#edituser-error')
+                .text('Это сообщение не должно появляться, если появилось, то сервером получены некорректные данные')
+        }
     })
 
     // Delete пользователя
@@ -250,6 +252,16 @@ $(document).ready(async function () {
             $('#admin-tab-panel a[href="#usersList"]').tab('show')
             this.reset()
         }
+
+        if (response.status == 409) {
+            $('#newuser-error').text('Такой email существует')
+        }
+
+        if (response.status == 406) {
+            $('#newuser-error')
+                .text('Это сообщение не должно появляться, если появилось, то сервером получены некорректные данные')
+        }
+
     })
 
 

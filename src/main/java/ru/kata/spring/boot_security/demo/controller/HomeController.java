@@ -21,6 +21,17 @@ public class HomeController {
         this.roleService = roleService;
     }
 
+    @GetMapping("/user")
+    public String welcomeUser() {
+        return "index";
+    }
+
+    @GetMapping("/admin")
+    public String welcomeAdmin() {
+        return "index";
+    }
+
+
     @GetMapping(value = "/")
     public String home() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -31,12 +42,6 @@ public class HomeController {
         } else {
             return "redirect:/user";
         }
-    }
-
-
-    @GetMapping("/user")
-    public String welcomeUser() {
-        return "index";
     }
 
 }
