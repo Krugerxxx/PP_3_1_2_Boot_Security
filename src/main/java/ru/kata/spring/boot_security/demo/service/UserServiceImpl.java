@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,12 +10,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import ru.kata.spring.boot_security.demo.dao.UserRepo;
 import ru.kata.spring.boot_security.demo.exeption_handling.EmailExistsException;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,11 +25,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(UserRepo userRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepo userRepo, BCryptPasswordEncoder bCryptPasswordEncoder, RoleService roleService) {
         this.userRepo = userRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
@@ -37,12 +42,14 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
+
         if (!existEmail(user.getEmail()) ||
                 (existEmail(user.getEmail()) && findByUsername(user.getEmail()).getId() == user.getId())) {
             userRepo.save(user);
         } else {
             throw new EmailExistsException();
         }
+
         return user;
     }
 
@@ -71,6 +78,15 @@ public class UserServiceImpl implements UserService {
         userRepo.deleteById(id);
     }
 
+    public User reSetRoles(User user) {
+        Set<Role> roles = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            roles.add(roleService.getByName(role.getName()));
+        }
+        user.setRoles(roles);
+        return user;
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -92,5 +108,6 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
 
 }

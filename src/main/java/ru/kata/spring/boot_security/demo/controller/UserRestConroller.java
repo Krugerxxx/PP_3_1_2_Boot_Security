@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -45,34 +46,20 @@ public class UserRestConroller {
     @PostMapping()
     public User addUser(@RequestBody @Valid User user,
                         BindingResult result) {
-
-        Set<Role> roles = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            roles.add(roleService.getByName(role.getName()));
-        }
-        user.setRoles(roles);
-
         if (result.hasErrors()) {
             throw new IncorrectDataException();
         }
-        return userService.save(user);
+        return userService.save(((UserServiceImpl) userService).reSetRoles(user));
     }
 
     @PatchMapping(value = "/{id}")
     public User editUser(@RequestBody @Valid User user,
                          BindingResult result) {
-
-        Set<Role> roles = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            roles.add(roleService.getByName(role.getName()));
-        }
-        user.setRoles(roles);
-
         if (result.hasErrors()) {
             throw new IncorrectDataException();
         }
-        
-        return userService.save(user);
+
+        return userService.save(((UserServiceImpl) userService).reSetRoles(user));
     }
 
     @DeleteMapping(value = "/{id}")
