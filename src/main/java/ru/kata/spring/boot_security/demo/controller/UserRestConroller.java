@@ -1,14 +1,11 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
@@ -43,7 +40,6 @@ public class UserRestConroller {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Redirect-Ref", "/admin");
         return new ResponseEntity<>(userService.findById(id), httpHeaders, HttpStatus.OK);
-        //return userService.findById(id);
     }
 
 
