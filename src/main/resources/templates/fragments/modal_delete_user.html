@@ -13,7 +13,6 @@
          aria-labelledby="exampleModalLabel"
          aria-hidden="true">
 
-        <!--th:attr="id='deleteModal' + ${user.id}"-->
 
         <div class="modal-dialog" modal-dialog-centered>
             <div class="modal-content">
@@ -30,20 +29,19 @@
                     </button>
                 </div>
 
-            <!--    <form th:action="@{/admin/delete_user{id} (id=${user.id})}"
-                      th:object="${user}"> -->
+                <form id="deleteForm">
 
                     <div class="modal-body">
                         <div class="container col-6 text-center offset-md-3">
 
-                         <!--   <table>
+                            <table>
 
                                 <tr>
                                     <div class="form-group text-center">
                                         <strong>ID</strong>
-                                        <input th:type="text"
+                                        <input id="delete_id"
+                                               type="text"
                                                class="form-control"
-                                               th:value="*{id}"
                                                name="id"
                                                readonly>
                                     </div>
@@ -52,9 +50,9 @@
                                 <tr>
                                     <div class="form-group text-center">
                                         <strong>First name</strong>
-                                        <input th:type="text"
+                                        <input id="delete_firstname"
+                                               type="text"
                                                class="form-control"
-                                               th:value="*{firstname}"
                                                name="firstname"
                                                readonly
                                                placeholder="First name">
@@ -64,9 +62,9 @@
                                 <tr>
                                     <div class="form-group text-center">
                                         <strong>Last name</strong>
-                                        <input th:type="text"
+                                        <input id="delete_lastname"
+                                               type="text"
                                                class="form-control"
-                                               th:value="*{lastname}"
                                                name="lastname"
                                                readonly
                                                placeholder="Last name">
@@ -76,9 +74,9 @@
                                 <tr>
                                     <div class="form-group text-center">
                                         <strong>Age</strong>
-                                        <input th:type="number"
+                                        <input id="delete_age"
+                                               type="number"
                                                class="form-control"
-                                               th:value="*{age}"
                                                name="age"
                                                readonly
                                                placeholder="Age">
@@ -88,9 +86,9 @@
                                 <tr>
                                     <div class="form-group text-center">
                                         <strong>Email</strong>
-                                        <input th:type="email"
+                                        <input id="delete_email"
+                                               type="email"
                                                class="form-control"
-                                               th:value="*{email}"
                                                name="email"
                                                readonly
                                                placeholder="Email">
@@ -100,9 +98,9 @@
                                 <tr>
                                     <div class="form-group text-center">
                                         <strong>Password</strong>
-                                        <input th:type="password"
+                                        <input id="delete_password"
+                                               type="password"
                                                class="form-control"
-                                               th:field="*{password}"
                                                name="password"
                                                readonly
                                                placeholder="Password">
@@ -113,23 +111,15 @@
                                 <tr>
                                     <div class="form-group text-center">
                                         <strong>Role</strong>
-                                        <select class="custom-select"
-                                                th:value="*{roles}"
+                                        <select id="delete_roles"
+                                                class="custom-select"
                                                 name="roles"
                                                 size="2"
                                                 disabled>
-
-                                            <option th:each="role: ${roleName}"
-                                                    th:value="${role.id}"
-                                                    th:selected="${user.roles.contains(role)}">
-                                                <th:block
-                                                        th:text="${role.name}">
-                                                </th:block>
-                                            </option>
                                         </select>
                                     </div>
                                 </tr>
-                            </table>  -->
+                            </table>
                         </div>
                     </div>
 
@@ -145,7 +135,7 @@
                         </button>
 
                     </div>
-            <!--    </form>  -->
+                </form>
             </div>
         </div>
     </div>

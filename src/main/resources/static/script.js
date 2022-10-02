@@ -60,11 +60,11 @@ let users = {
         let userList = await fetch('/api/users').then(response => response.json())
         userList.forEach(user => users.userMap.set(user.id, user))
         updateUserTable()
-    },/*
+    },
     remove: async (id) => {
         users.userMap.delete(id)
         updateUserTable()
-    },*/
+    },
     save: async (user) => {
         users.userMap.set(user.id, user)
         updateUserTable()
@@ -113,7 +113,6 @@ async function updateRolesInNewUserForm() {
     select.html('')
     allRoles.list.forEach(role => select.append("<option value='"+role.name+"'>"+role.name))
 }*/
-
 
 
 $(document).ready(async function () {
@@ -171,7 +170,7 @@ $(document).ready(async function () {
         $('#editForm #edit_id').val(user.id)
         $('#editForm #edit_firstname').val(user.firstname)
         $('#editForm #edit_lastname').val(user.lastname)
-        $('#editForm #edit_username').val(user.username)
+        //$('#editForm #edit_username').val(user.username)
         $('#editForm #edit_age').val(user.age)
         $('#editForm #edit_email').val(user.email)
         $('#editForm #edit_password').attr(user.password)
@@ -198,6 +197,39 @@ $(document).ready(async function () {
             await users.save(await response.json())
             $('#editmodal').modal('hide');
             this.reset()
+        }
+    })
+
+    // Delete пользователя USER MODAL
+    $('body').on('click', '.delete-button', function () {
+        let userId = Number($(this).attr('data-user-id'))
+        let user = users.userMap.get(userId)
+
+        $('#deleteForm').trigger('reset')
+        $('#deleteForm #delete_id').val(user.id)
+        $('#deleteForm #delete_firstname').val(user.firstname)
+        $('#deleteForm #delete_lastname').val(user.lastname)
+        $('#deleteForm #delete_age').val(user.age)
+        $('#deleteForm #delete_email').val(user.email)
+        $('#deleteForm #delete_password').attr(user.password)
+        $('#deleteForm').find('#delete_roles').html('')
+        user.roles.forEach(role => $('#deleteForm').find('#delete_roles').append('<option value="' + role.name + '">' + role.name))
+    })
+
+
+    $('#deleteForm').on("submit", async function (event) {
+        event.preventDefault();
+        let userId = Number($(this).find('#delete_id').val())
+
+        let response = await fetch('/api/users/' + userId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        if (response.status == 200) {
+            await users.remove(userId)
+            $('#deleteModal').modal('hide');
         }
     })
 
