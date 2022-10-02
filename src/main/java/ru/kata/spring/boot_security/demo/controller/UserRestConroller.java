@@ -8,12 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -64,10 +66,10 @@ public class UserRestConroller {
     //TODO что возвращать
     // TODO в случае ошибки здесь могу отправить о существующем email
     @PutMapping(value = "/{id}")
-    public ModelAndView editUser(@RequestBody @Valid User user,
+    public User editUser(@RequestBody @Valid User user,
                                  BindingResult result,
                                  @PathVariable Long id) {
-
+        System.out.println("!!!");
         if (result.hasErrors()) {
             System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
             return null;
@@ -75,18 +77,24 @@ public class UserRestConroller {
 
         //TODO подумать, что с этим можно сделать в последней версии, пока переадресация на страницу пользователя
         String enterEmail = user.getEmail();
-        if (userService.save(user).getEmail() == "") {
+        user = userService.save(user);
+        if (user.getEmail() == "") {
             System.out.println("Такой email существует: " + enterEmail);
             return null;
         }
 
-        return null;
+        return user;
     }
 
     @DeleteMapping(value = "/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
         return null;
+    }
+
+    @GetMapping("/roles")
+    public Set<Role> getAllRoles() {
+        return roleService.findAll();
     }
 
 }

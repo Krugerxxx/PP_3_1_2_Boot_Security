@@ -13,7 +13,6 @@
          aria-hidden="true"
          id="editmodal">
 
-        <!--th:attr="id='editModal' + ${user.id}"-->
 
         <div class="modal-dialog" modal-dialog-centered>
             <div class="modal-content">
@@ -30,135 +29,125 @@
                     </button>
                 </div>
 
-                <!--   <form th:action="@{/admin/edit_user{id} (id=${user.id})}"
-                         th:object="${user}"
-                         th:method="POST"> -->
+                <form id="editForm">
 
-                <div class="modal-body">
-                    <div class="container col-6 text-center offset-md-3">
+                    <div class="modal-body">
+                        <div class="container col-6 text-center offset-md-3">
 
-                        <!--          <table>
+                            <table>
 
-                                      <tr>
-                                          <div class="form-group text-center">
-                                              <strong>ID</strong>
-                                              <input th:type="text"
-                                                     class="form-control"
-                                                     th:value="*{id}"
-                                                     name="id"
-                                                     readonly>
-                                          </div>
-                                      </tr>
+                                <tr>
+                                    <div class="form-group text-center">
+                                        <strong>ID</strong>
+                                        <input id="edit_id"
+                                               type="text"
+                                               class="form-control"
+                                               name="id"
+                                               readonly>
+                                    </div>
+                                </tr>
 
-                                      <tr>
-                                          <div class="form-group text-center">
-                                              <strong>First name</strong>
-                                              <input th:type="text"
-                                                     class="form-control"
-                                                     th:value="*{firstname}"
-                                                     name="firstname"
-                                                     required
-                                                     minlength="2"
-                                                     maxlength="50"
-                                                     pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
-                                                     placeholder="First name">
-                                          </div>
-                                      </tr>
+                                <tr>
+                                    <div class="form-group text-center">
+                                        <strong>First name</strong>
+                                        <input id="edit_firstname"
+                                               type="text"
+                                               class="form-control"
+                                               name="firstname"
+                                               required
+                                               minlength="2"
+                                               maxlength="50"
+                                               pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
+                                               placeholder="First name">
+                                    </div>
+                                </tr>
 
-                                      <tr>
-                                          <div class="form-group text-center">
-                                              <strong>Last name</strong>
-                                              <input th:type="text"
-                                                     class="form-control"
-                                                     th:value="*{lastname}"
-                                                     name="lastname"
-                                                     required
-                                                     minlength="2"
-                                                     maxlength="50"
-                                                     pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
-                                                     placeholder="Last name">
-                                          </div>
-                                      </tr>
+                                <tr>
+                                    <div class="form-group text-center">
+                                        <strong>Last name</strong>
+                                        <input id="edit_lastname"
+                                               type="text"
+                                               class="form-control"
+                                               name="lastname"
+                                               required
+                                               minlength="2"
+                                               maxlength="50"
+                                               pattern="^[A-Za-zА-Яа-яЁё0-9_]+$"
+                                               placeholder="Last name">
+                                    </div>
+                                </tr>
 
-                                      <tr>
-                                          <div class="form-group text-center">
-                                              <strong>Age</strong>
-                                              <input th:type="number"
-                                                     class="form-control"
-                                                     th:value="*{age}"
-                                                     name="age"
-                                                     required
-                                                     min="0"
-                                                     max="120"
-                                                     placeholder="Age">
-                                          </div>
-                                      </tr>
+                                <tr>
+                                    <div class="form-group text-center">
+                                        <strong>Age</strong>
+                                        <input id="edit_age"
+                                               type="number"
+                                               class="form-control"
+                                               name="age"
+                                               required
+                                               min="0"
+                                               max="120"
+                                               placeholder="Age">
+                                    </div>
+                                </tr>
 
-                                      <tr>
-                                          <div class="form-group text-center">
-                                              <strong>Email</strong>
-                                              <input th:type="email"
-                                                     class="form-control"
-                                                     th:value="*{email}"
-                                                     name="email"
-                                                     required
-                                                     placeholder="Email">
-                                          </div>
-                                      </tr>
+                                <tr>
+                                    <div class="form-group text-center">
+                                        <strong>Email</strong>
+                                        <input id="edit_email"
+                                               type="email"
+                                               class="form-control"
+                                               name="email"
+                                               required
+                                               placeholder="Email">
+                                    </div>
+                                </tr>
 
-                                      <tr>
-                                          <div class="form-group text-center">
-                                              <strong>Password</strong>
-                                              <input th:type="password"
-                                                     class="form-control"
-                                                     th:field="*{password}"
-                                                     name="password"
-                                                     minlength="3"
-                                                     maxlength="50"
-                                                     placeholder="Password">
-                                          </div>
-                                      </tr>
+                                <tr>
+                                    <div class="form-group text-center">
+                                        <strong>Password</strong>
+                                        <input id="edit_password"
+                                               type="password"
+                                               class="form-control"
+                                               name="password"
+                                               minlength="3"
+                                               maxlength="50"
+                                               placeholder="Password">
+                                    </div>
+                                </tr>
 
 
-                                      <tr>
-                                          <div class="form-group text-center">
-                                              <strong>Role</strong>
-                                              <select class="custom-select"
-                                                      th:value="*{roles}"
-                                                      name="roles"
-                                                      multiple
-                                                      size="2"
-                                                      required>
-
-                                                  <option th:each="role: ${roleName}"
-                                                          th:value="${role.id}"
-                                                          th:selected="${user.roles.contains(role)}">
-                                                      <th:block
-                                                              th:text="${role.name}">
-                                                      </th:block>
-                                                  </option>
-                                              </select>
-                                          </div>
-                                      </tr>
-                                  </table> -->
+                                <tr>
+                                    <div class="form-group text-center">
+                                        <strong>Role</strong>
+                                        <select id="edit_roles"
+                                                class="custom-select"
+                                                name="roles"
+                                                multiple
+                                                size="2"
+                                                required>
+                                        </select>
+                                    </div>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="modal-footer">
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit"
-                            class="btn btn-primary editBTN">
-                        Edit
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit"
+                                class="btn btn-primary">
+                            Edit
+                        </button>
 
 
-                </div>
-                <!--</form>-->
+                    </div>
+                </form>
             </div>
         </div>
     </div>
