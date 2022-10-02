@@ -78,7 +78,7 @@ let allRoles = {
     update: async () => {
         allRoles.list = await fetch('/api/users/roles')
             .then(response => response.json())
-        //await updateRolesInNewUserForm()
+        await updateRolesInNewUserForm()
     }
 }
 
@@ -106,13 +106,12 @@ async function updateUserTable() {
     })
 }
 
-
-/*
+//Добавляем роли в таблицу создания пользователя
 async function updateRolesInNewUserForm() {
-    let select = $('#newUserForm select')
+    let select = $('#createForm select')
     select.html('')
-    allRoles.list.forEach(role => select.append("<option value='"+role.name+"'>"+role.name))
-}*/
+    allRoles.list.forEach(role => select.append("<option value='" + role.name + "'>" + role.name))
+}
 
 
 $(document).ready(async function () {
@@ -170,7 +169,6 @@ $(document).ready(async function () {
         $('#editForm #edit_id').val(user.id)
         $('#editForm #edit_firstname').val(user.firstname)
         $('#editForm #edit_lastname').val(user.lastname)
-        //$('#editForm #edit_username').val(user.username)
         $('#editForm #edit_age').val(user.age)
         $('#editForm #edit_email').val(user.email)
         $('#editForm #edit_password').attr(user.password)
@@ -200,7 +198,7 @@ $(document).ready(async function () {
         }
     })
 
-    // Delete пользователя USER MODAL
+    // Delete пользователя
     $('body').on('click', '.delete-button', function () {
         let userId = Number($(this).attr('data-user-id'))
         let user = users.userMap.get(userId)
@@ -230,6 +228,27 @@ $(document).ready(async function () {
         if (response.status == 200) {
             await users.remove(userId)
             $('#deleteModal').modal('hide');
+        }
+    })
+
+
+    // Добавление нового пользователя
+    $('#createForm').on("submit", async function (event) {
+        event.preventDefault();
+
+        let json = getJson(event.currentTarget)
+        let response = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: json
+        });
+
+        if (response.status == 200) {
+            await users.save(await response.json())
+            $('#admin-tab-panel a[href="#usersList"]').tab('show')
+            this.reset()
         }
     })
 

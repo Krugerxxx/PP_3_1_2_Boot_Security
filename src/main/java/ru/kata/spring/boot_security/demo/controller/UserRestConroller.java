@@ -46,11 +46,19 @@ public class UserRestConroller {
         //return userService.findById(id);
     }
 
+
     /*TODO возвращаемое значение должно быть id созданного юзера --  в заголовке Location: /:entity/:new_id
       TODO в случае ошибки здесь могу отправить о существующем email */
     @PostMapping()
-    public ModelAndView addUser(@RequestBody @Valid User user,
+    public User addUser(@RequestBody @Valid User user,
                                 BindingResult result) {
+
+        Set<Role> roles = new HashSet<>();
+        for(Role role : user.getRoles()) {
+            roles.add(roleService.getByName(role.getName()));
+        }
+        user.setRoles(roles);
+
         if (result.hasErrors()) {
             System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
             return null;
@@ -61,7 +69,7 @@ public class UserRestConroller {
             System.out.println("Такой email существует: " + enterEmail);
             return null;
         }
-        return null;
+        return user;
     }
 
 
