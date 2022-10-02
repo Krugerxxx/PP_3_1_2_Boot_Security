@@ -187,7 +187,7 @@ $(document).ready(async function () {
 
         let json = getJson(event.currentTarget)
         let response = await fetch('/api/users/' + userId, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },

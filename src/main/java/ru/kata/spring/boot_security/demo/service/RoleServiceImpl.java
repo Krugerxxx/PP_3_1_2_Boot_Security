@@ -19,6 +19,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public Role save(Role role) {
         try {
             roleRepo.save(role);
@@ -29,7 +30,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    @Transactional
     public Set<Role> findAll() {
         Set<Role> roleSet = new HashSet<>();
         roleRepo.findAll().forEach(n -> roleSet.add(n));

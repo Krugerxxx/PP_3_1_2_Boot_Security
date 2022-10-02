@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -65,11 +67,18 @@ public class UserRestConroller {
 
     //TODO что возвращать
     // TODO в случае ошибки здесь могу отправить о существующем email
-    @PutMapping(value = "/{id}")
+    @PatchMapping(value = "/{id}")
     public User editUser(@RequestBody @Valid User user,
                                  BindingResult result,
                                  @PathVariable Long id) {
-        System.out.println("!!!");
+
+        Set<Role> roles = new HashSet<>();
+        for(Role role : user.getRoles()) {
+            roles.add(roleService.getByName(role.getName()));
+        }
+        user.setRoles(roles);
+
+
         if (result.hasErrors()) {
             System.out.println("Будем считать, что здесь логи, frontend не справился с проверкой");
             return null;
